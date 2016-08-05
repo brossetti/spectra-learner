@@ -1,39 +1,19 @@
-function [ output_args ] = train(rootdir)
+function [ mdl ] = train( rootdir )
 %TRAIN Trains the spectral SVM based on the reference spectra
 %   Detailed explanation goes here
 
-if nargin == 0
-    rootdir = fullfile('..', 'references');
-end
+% randomly select predictors for training
+idx = randperm(size(x,1)); 
+trainidx = idx(1:round(2*size(x,1)/3));
+testidx = idx(length(trainidx)+1:end);
 
-% check reference dir
-if ~exist(rootdir, 'dir')
-    error('Reference directory does not exist.');
-end
+% train model
+gcp;
+paroptions=statset('UseParallel',true);
+mdl = fitcecoc(x(trainidx,:),y(trainidx), 'Options', paroptions);
 
-ext = '.czi';
-
-files = dir(fullfile(rootdir, ['*' ext]));
-dirIdx = [files.isdir];
-files = {files(~dirIdx).name}';
-numFiles = length(files);
-
-% build full file path
-filepaths = cell(1,numFiles);
-for i = 1:numFiles
-    filepaths{i} = fullfile(rootdir,files{i});
-    [~, files{i}, ~] = fileparts(files{i});
-end
-
-% group files by class
-{class, group}  = cellfun(@(x) strsplit(x, '_'), files, 'UniformOutput', false);
-
-
-end
-
-function [ norm ] = imnorm( img )
-%IMNORM Normalizes an image to its maximum value
-
-
+% check model with test set
+predclass = predict(Mdl, x(testidx,:));
+confMat = confusionmat(y(testidx), predclass);
 
 end
