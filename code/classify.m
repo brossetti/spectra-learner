@@ -20,7 +20,7 @@ stack = zeros(m*n,nclasses);
 for i = 1:m*n
     stack(i,classes(i)+1) = grayimg(i); 
 end    
-cast(stack, 'like', img);
+stack = cast(stack, 'like', img);
 stack = reshape(stack, m, n, nclasses);
 
 % generate rgb preview image

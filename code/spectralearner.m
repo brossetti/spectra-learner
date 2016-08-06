@@ -15,7 +15,7 @@ elseif nargin == 2
 end
     
 % load model or generate model
-if exist(fullfile(refdir, 'model.mat'), 'file')
+if exist(fullfile(refdir, 'model.mat'), 'file') && 0
     load(fullfile(refdir, 'model.mat'));
 else 
     [X, Y, classes] = getrefdata(refdir);

@@ -13,7 +13,7 @@ paroptions=statset('UseParallel',true);
 mdl = fitcecoc(X(trainidx,:),Y(trainidx), 'Options', paroptions);
 
 % check model with test set
-predclass = predict(Mdl, X(testidx,:));
+predclass = predict(mdl, X(testidx,:));
 confMat = confusionmat(Y(testidx), predclass);
 
 end

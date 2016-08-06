@@ -69,10 +69,10 @@ for i = 1:length(filegrps)
     
     for j = 1:length(filegrps(i).Path)
         % import image stack
-        tmp = stackread(filegrps(i).Path{j});
+        tmp = double(stackread(filegrps(i).Path{j}));
 
         % normalize stack to max intensity
-        tmp = cast(double(tmp) ./ double(max(tmp(:))) .* double(intmax(bd)), bd) ;
+        tmp = tmp ./ max(tmp(:)) .* double(intmax(bd)) ;
 
         % insert track into template
         sidx = ismember(trcknames, nameparts(k,2));
@@ -81,11 +81,11 @@ for i = 1:length(filegrps)
     end
     
     % generate mask
-    mask = imbinarize(var(img,0,3));
+    mask = imbinarize(mat2gray(var(img,0,3)));
     bgndmask = imerode(~mask, strel('square', 50));
     
     % add predictors and labels
-    img = reshape(img, m*n, p);
+    img = round(reshape(img, m*n, p));
     X = cat(1, X, img(mask(:),:));
     X = cat(1, X, img(bgndmask(:),:));
     

@@ -24,18 +24,19 @@ n = 0;
 
 for i = 1:length(filepaths)
     % import image stack
-    tmp = stackread(filepaths{i});
+    tmp = double(stackread(filepaths{i}));
     
     % add data to running sum
     grayimg = grayimg + sum(tmp, 3);
     n = n + size(tmp, 3);
     
     % normalize stack to max intensity
-    tmp = cast(double(tmp) ./ double(max(tmp(:))) .* double(intmax(bd)), bd) ;
+    tmp = tmp ./ max(tmp(:)) .* double(intmax(bd));
     
     % concatenate
     img = cat(3, img, tmp);
 end    
+img = cast(img, bd);
 
 % calculate grayscale image
 grayimg = cast(grayimg ./ n, bd);
