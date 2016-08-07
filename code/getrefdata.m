@@ -39,14 +39,6 @@ bandidx = [1 cumsum(bands)+1];
 bandidx = bandidx(1:end-1);
 
 % set image properties
-switch imginfo(1).BitDepth;
-    case 8
-        bd = 'uint8';
-    case 16
-        bd = 'uint16';
-    otherwise
-        bd = 'uint8';
-end
 m = imginfo(1).Width;
 n = imginfo(1).Height;
 p = sum(bands);
@@ -72,7 +64,7 @@ for i = 1:length(filegrps)
         tmp = double(stackread(filegrps(i).Path{j}));
 
         % normalize stack to max intensity
-        tmp = tmp ./ max(tmp(:)) .* double(intmax(bd)) ;
+        tmp = tmp ./ max(tmp(:)) .* 255;
 
         % insert track into template
         sidx = ismember(trcknames, nameparts(k,2));

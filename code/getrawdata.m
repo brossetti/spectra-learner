@@ -18,7 +18,7 @@ n = imginfo(1).Height;
 p = length(imginfo);
 
 % initialize
-img = zeros(m,n,p);
+img = [];
 grayimg = zeros(m,n);
 n = 0;
 
@@ -31,14 +31,14 @@ for i = 1:length(filepaths)
     n = n + size(tmp, 3);
     
     % normalize stack to max intensity
-    tmp = tmp ./ max(tmp(:)) .* double(intmax(bd));
+    tmp = tmp ./ max(tmp(:)) .* 255;
     
     % concatenate
     img = cat(3, img, tmp);
 end    
-img = cast(img, bd);
 
 % calculate grayscale image
-grayimg = cast(grayimg ./ n, bd);
+grayimg = cast((grayimg - min(grayimg(:))) ./ max(grayimg(:)) .* double(intmax(bd)), bd);
+% grayimg = cast(grayimg ./ n, bd);
     
 end

@@ -4,7 +4,7 @@ function [ mdl ] = train( X, Y )
 
 % randomly select predictors for training
 idx = randperm(size(X,1)); 
-trainidx = idx(1:round(2*size(X,1)/3));
+trainidx = idx(1:round(3*size(X,1)/4));
 testidx = idx(length(trainidx)+1:end);
 
 % train model

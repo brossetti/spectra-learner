@@ -40,8 +40,8 @@ for i = 1:size(filegrps, 2)
     [stack, rgbimg] = classify(mdl, img, grayimg);
     
     % save processed data
-    stackwrite(stack, fullfile(outdir, [filegrps(i).Name '_stack.tif']));
-    imwrite(rgbimg, fullfile(outdir, [filegrps(i).Name '_color.tif']));
+    stackwrite(stack, fullfile(outdir, [filegrps(i).Name '_stack.png']));
+    imwrite(rgbimg, fullfile(outdir, [filegrps(i).Name '_color.png']));
 end
 
 end

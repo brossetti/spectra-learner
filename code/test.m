@@ -17,13 +17,14 @@ for i = 1:numFiles
     filepaths{i} = fullfile(rootdir,files{i});
     
     imginfo = imfinfo(filepaths{i});
-    m = round(imginfo(1).Width/2);
-    n = round(imginfo(1).Height/2);
+    m = round(imginfo(1).Width);
+    n = round(imginfo(1).Height);
     nslices = length(imginfo);
     img{i} = zeros(m,n,nslices,'uint16');
 
     for j=1:nslices
        img{i}(:,:,j) = imresize(imread(filepaths{i},'Index',j,'Info',imginfo), [m,n]);
+       img{i}(:,:,j) = imread(filepaths{i},'Index',j,'Info',imginfo);
     end
 
 end
