@@ -10,7 +10,8 @@ testidx = idx(length(trainidx)+1:end);
 % train model
 gcp;
 paroptions=statset('UseParallel',true);
-mdl = fitcecoc(X(trainidx,:),Y(trainidx), 'Options', paroptions);
+mdl = fitcecoc(X(trainidx,:),Y(trainidx), 'Prior', 'uniform', ...
+    'Options', paroptions);
 
 % check model with test set
 predclass = predict(mdl, X(testidx,:));

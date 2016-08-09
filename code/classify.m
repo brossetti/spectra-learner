@@ -26,6 +26,7 @@ stack = reshape(stack, m, n, nclasses);
 cmap = [1, 1, 1; hsv(nclasses-1)];
 wghts = reshape(cmap(classes+1,:), m, n, 3);
 rgbimg = repmat(double(grayimg), 1, 1, 3) .* wghts;
+rgbimg = (rgbimg - min(rgbimg(:))) ./ max(rgbimg(:)) .* 255;
 rgbimg = cast(rgbimg, 'like', grayimg);
 end
 

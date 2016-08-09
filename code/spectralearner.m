@@ -15,7 +15,7 @@ elseif nargin == 2
 end
     
 % load model or generate model
-if exist(fullfile(refdir, 'model.mat'), 'file') && 0
+if exist(fullfile(refdir, 'model.mat'), 'file')
     load(fullfile(refdir, 'model.mat'));
 else 
     [X, Y, classes] = getrefdata(refdir);
@@ -40,8 +40,8 @@ for i = 1:size(filegrps, 2)
     [stack, rgbimg] = classify(mdl, img, grayimg);
     
     % save processed data
-    stackwrite(stack, fullfile(outdir, [filegrps(i).Name '_stack.png']));
-    imwrite(rgbimg, fullfile(outdir, [filegrps(i).Name '_color.png']));
+    stackwrite(stack, fullfile(outdir, [filegrps(i).Name '_stack.tif']));
+    imwrite(rgbimg, fullfile(outdir, [filegrps(i).Name '_color.jpg']));
 end
 
 end

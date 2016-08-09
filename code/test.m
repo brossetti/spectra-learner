@@ -23,7 +23,7 @@ for i = 1:numFiles
     img{i} = zeros(m,n,nslices,'uint16');
 
     for j=1:nslices
-       img{i}(:,:,j) = imresize(imread(filepaths{i},'Index',j,'Info',imginfo), [m,n]);
+%        img{i}(:,:,j) = imresize(imread(filepaths{i},'Index',j,'Info',imginfo), [m,n]);
        img{i}(:,:,j) = imread(filepaths{i},'Index',j,'Info',imginfo);
     end
 

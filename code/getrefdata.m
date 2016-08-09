@@ -73,11 +73,11 @@ for i = 1:length(filegrps)
     end
     
     % generate mask
-    mask = imbinarize(mat2gray(var(img,0,3)));
+    mask = imbinarize(var(img,0,3));
     bgndmask = imerode(~mask, strel('square', 50));
     
     % add predictors and labels
-    img = round(reshape(img, m*n, p));
+    img = reshape(img, m*n, p);
     X = cat(1, X, img(mask(:),:));
     X = cat(1, X, img(bgndmask(:),:));
     
