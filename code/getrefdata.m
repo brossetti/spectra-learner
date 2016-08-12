@@ -1,9 +1,12 @@
-function [ X, Y, classes ] = getrefdata( rootdir )
+function [ X, Y, classes ] = getrefdata( rootdir, plt )
 %GETREFDATA Imports reference image data for training
 %   Detailed explanation goes here
 
 if nargin == 0
     rootdir = fullfile('..', 'references');
+    plt = false;
+elseif nargin == 1
+    plt = false;
 end
 
 % check reference dir
@@ -75,10 +78,12 @@ for i = 1:length(filegrps)
     % generate mask
     mask = imbinarize(mean(img,3));
     bgndmask = imerode(~mask, strel('square', round(size(img, 1)/8)));
-
-    imshowpair(mask, bgndmask, 'montage');
-    title(filegrps(i).Name);
-    pause(1);
+    
+    if plt
+        imshowpair(mask, bgndmask, 'montage');
+        title(filegrps(i).Name);
+        pause(1);
+    end
     
     % add predictors and labels
     img = reshape(img, m*n, p);

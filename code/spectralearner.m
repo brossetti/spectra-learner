@@ -18,7 +18,7 @@ end
 if exist(fullfile(refdir, 'model.mat'), 'file') && 0
     load(fullfile(refdir, 'model.mat'));
 else 
-    [X, Y, classes] = getrefdata(refdir);
+    [X, Y, classes] = getrefdata(refdir, true);
     mdl =  train(X,Y);
     save(fullfile(refdir, 'model.mat'), 'mdl', '-v7.3');
 end
