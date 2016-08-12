@@ -64,7 +64,7 @@ for i = 1:length(filegrps)
         tmp = double(stackread(filegrps(i).Path{j}));
 
         % normalize stack to max intensity
-        tmp = tmp ./ max(tmp(:)) .* 255;
+        tmp = tmp ./ max(tmp(:));
 
         % insert track into template
         sidx = ismember(trcknames, nameparts(k,2));
@@ -73,8 +73,12 @@ for i = 1:length(filegrps)
     end
     
     % generate mask
-    mask = imbinarize(var(img,0,3));
-    bgndmask = imerode(~mask, strel('square', 50));
+    mask = imbinarize(mean(img,3));
+    bgndmask = imerode(~mask, strel('square', round(size(img, 1)/8)));
+
+    imshowpair(mask, bgndmask, 'montage');
+    title(filegrps(i).Name);
+    pause(1);
     
     % add predictors and labels
     img = reshape(img, m*n, p);
@@ -84,6 +88,8 @@ for i = 1:length(filegrps)
     Y = cat(1, Y, ones(sum(mask(:)),1).*i);
     Y = cat(1, Y, zeros(sum(bgndmask(:)),1));
 end
+
+% randomly select a uniform distribution of each class
 
 
 end

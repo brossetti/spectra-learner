@@ -10,11 +10,12 @@ testidx = idx(length(trainidx)+1:end);
 % train model
 gcp;
 paroptions=statset('UseParallel',true);
-mdl = fitcecoc(X(trainidx,:),Y(trainidx), 'Prior', 'uniform', ...
-    'Options', paroptions);
+t = templateSVM('KernelFunction', 'polynomial', 'PolynomialOrder', 2);
+mdl = fitcecoc(X(trainidx,:),Y(trainidx), 'Learner', t, ...
+    'Prior', 'uniform', 'Options', paroptions);
 
 % check model with test set
 predclass = predict(mdl, X(testidx,:));
-confMat = confusionmat(Y(testidx), predclass);
+confMat = confusionmat(Y(testidx), predclass)
 
 end

@@ -31,14 +31,14 @@ for i = 1:length(filepaths)
     n = n + size(tmp, 3);
     
     % normalize stack to max intensity
-    tmp = tmp ./ max(tmp(:)) .* 255;
+    tmp = tmp ./ max(tmp(:));
     
     % concatenate
     img = cat(3, img, tmp);
 end    
 
 % calculate grayscale image
-grayimg = cast((grayimg - min(grayimg(:))) ./ max(grayimg(:)) .* double(intmax(bd)), bd);
-% grayimg = cast(grayimg ./ n, bd);
+grayimg = grayimg - min(grayimg(:));
+grayimg = cast(grayimg ./ max(grayimg(:)) .* double(intmax(bd)), bd);
     
 end
