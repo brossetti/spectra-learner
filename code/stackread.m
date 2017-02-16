@@ -14,7 +14,7 @@ switch imginfo(1).BitDepth;
     otherwise
         bd = 'uint8';
 end
-img = zeros(m,n,nslices,bd);
+img = zeros(n,m,nslices,bd);
 
 for i=1:nslices
    img(:,:,i) = imread(filename,'Index',i,'Info',imginfo);

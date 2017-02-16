@@ -60,7 +60,7 @@ Y = [];
 k = 1;
 for i = 1:length(filegrps)
     % initialize reference image
-    img = zeros(m, n, p);
+    img = zeros(n, m, p);
     
     for j = 1:length(filegrps(i).Path)
         % import image stack
