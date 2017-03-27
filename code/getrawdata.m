@@ -32,7 +32,7 @@ for i = 1:length(filepaths)
     n = n + size(tmp, 3);
     
     % normalize stack to max intensity
-    tmp = tmp ./ max(tmp(:));
+%     tmp = tmp ./ max(tmp(:));
     
     % concatenate
     img = cat(3, img, tmp);

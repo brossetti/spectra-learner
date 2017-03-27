@@ -1,6 +1,15 @@
 function [ img ] = stackread( filename )
 %STACKREAD Reads a multipage TIFF file
-%   Detailed explanation goes here
+%   stackread() is a function for reading a multipage TIFF file into a 3D 
+%   tensor, img, of type uint8 or uint16.
+%
+%   Example:
+%       [ img ] = stackread( filename )
+%
+%   Compatibility: Written and tested on MATLAB v9.0.0.341360 (2016a)
+%
+%   Author: Blair Rossetti
+%
 
 imginfo = imfinfo(filename);
 

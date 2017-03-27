@@ -105,6 +105,11 @@ for i = 1:numclasses
         mask = imbinarize(mean(img,3));
     end
     
+    % kmeans also works well for generating the mask
+%     [labels,centroids] = kmeans(reshape(img,m*n,p),2);
+%     mask = labels == 
+    
+    
     if includebg
         bgndmask = imerode(~mask, strel('square', round(size(img, 1)/8)));
     end

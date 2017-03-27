@@ -1,6 +1,24 @@
 function spectralearner( rawdir, refdir, outdir )
 %SPRECTRALEARNER Main function for spectra learner toolbox
-%   Detailed explanation goes here
+%   Spectra Learner is a pipeline of functions for classifying spectral
+%   micrographs by training a gaussian SVM model on reference images. This
+%   pipeline can handle simultaneous and sequentially acquired spectral
+%   images. This function is a wrapper that starts the pipeline, and allows
+%   the user to specify locations for the raw image directory, reference
+%   image directory, and output image directory. 
+%
+%   See README.md for more details.
+%
+%   Examples:
+%       spectralearner()
+%       spectralearner('../raw', '../reference', '../output')
+%
+%   Compatibility: Written and tested on MATLAB v9.0.0.341360 (2016a)
+%   Required Toolboxes: Statistics and Machine Learning, Image Processing, 
+%                       and Parallel Computing
+%
+%   Author: Blair Rossetti
+%
 
 % set parameters
 ext = '.tif';        % spectral image file extension (only supports tiff)
