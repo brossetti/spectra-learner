@@ -23,7 +23,8 @@ end
 stack = reshape(stack, m, n, nclasses);
 
 % generate rgb preview image
-cmap = [1, 1, 1; hsv(nclasses-1)];
+% cmap = [1, 1, 1; hsv(nclasses-1)];
+cmap = hsv(nclasses);
 wghts = reshape(cmap(classes+1,:), m, n, 3);
 rgbimg = repmat(double(grayimg), 1, 1, 3) .* wghts;
 rgbimg = rgbimg ./ max(rgbimg(:)) .* 255;

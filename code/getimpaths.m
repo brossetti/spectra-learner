@@ -1,6 +1,5 @@
 function [ filepaths ] = getimpaths( rootdir, ext )
-%GETIMPATHS Retrieves full files paths with a define extension in a defined
-%diretory
+%GETIMPATHS Retrieves full files for all images in rootdir ending with ext
 %   Detailed explanation goes here
 
 % chec input

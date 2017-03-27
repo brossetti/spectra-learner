@@ -1,12 +1,28 @@
-function [ X, Y, classes ] = getrefdata( rootdir, plt )
+function [ X, Y, classes ] = getrefdata( rootdir, ext, includebg, samplesize, plt )
 %GETREFDATA Imports reference image data for training
 %   Detailed explanation goes here
 
-if nargin == 0
-    rootdir = fullfile('..', 'references');
-    plt = false;
-elseif nargin == 1
-    plt = false;
+switch nargin
+    case 0 
+        rootdir = fullfile('..', 'references');
+        ext = '.tif';
+        includebg = true;
+        samplesize = 0;
+        plt = false;
+    case 1
+        ext = '.tif';
+        includebg = true;
+        samplesize = 0;
+        plt = false;
+    case 2
+        includebg = true;
+        samplesize = 0;
+        plt = false;
+    case 3
+        samplesize = 0;
+        plt = false;
+    case 4
+        plt = false;
 end
 
 % check reference dir
@@ -14,7 +30,7 @@ if ~exist(rootdir, 'dir')
     error('Reference directory does not exist.');
 end
 
-filepaths = getimpaths(rootdir);
+filepaths = getimpaths(rootdir, ext);
 
 % parse filenames
 [~, filenames, ~] = cellfun(@fileparts, filepaths, 'UniformOutput', false);
@@ -26,8 +42,9 @@ catch
 end
 
 % find reference names and track names
-[classes] = unique(nameparts(:,1));
-[trcknames, trckidx] = unique(nameparts(:,2));
+[classes] = unique(nameparts(:,1), 'stable');
+numclasses = length(classes);
+[trcknames, trckidx] = unique(nameparts(:,2), 'stable');
 
 % determine number of bands in each track
 [~, idx] = sort(trcknames);
@@ -42,8 +59,8 @@ bandidx = [1 cumsum(bands)+1];
 bandidx = bandidx(1:end-1);
 
 % set image properties
-m = imginfo(1).Width;
-n = imginfo(1).Height;
+n = imginfo(1).Width;
+m = imginfo(1).Height;
 p = sum(bands);
 
 % create array of filepaths by reference
@@ -58,9 +75,15 @@ end
 X = [];
 Y = [];
 k = 1;
-for i = 1:length(filegrps)
+
+if plt
+    r = floor(sqrt(numclasses));
+    c = ceil(numclasses/r); 
+end   
+
+for i = 1:numclasses
     % initialize reference image
-    img = zeros(n, m, p);
+    img = zeros(m, n, p);
     
     for j = 1:length(filegrps(i).Path)
         % import image stack
@@ -76,26 +99,71 @@ for i = 1:length(filegrps)
     end
     
     % generate mask
-    mask = imbinarize(mean(img,3));
-    bgndmask = imerode(~mask, strel('square', round(size(img, 1)/8)));
+    if verLessThan('matlab','9.0')
+        mask = im2bw(mean(img,3), graythresh(mean(img,3)));
+    else
+        mask = imbinarize(mean(img,3));
+    end
     
-    if plt
+    if includebg
+        bgndmask = imerode(~mask, strel('square', round(size(img, 1)/8)));
+    end
+    
+    if plt && includebg
+        subplot(r,c,i);
         imshowpair(mask, bgndmask, 'montage');
         title(filegrps(i).Name);
-        pause(1);
+    elseif plt
+        subplot(r,c,i);
+        imshow(mask);
+        title(filegrps(i).Name);
     end
     
     % add predictors and labels
     img = reshape(img, m*n, p);
-    X = cat(1, X, img(mask(:),:));
-    X = cat(1, X, img(bgndmask(:),:));
     
-    Y = cat(1, Y, ones(sum(mask(:)),1).*i);
-    Y = cat(1, Y, zeros(sum(bgndmask(:)),1));
+    if includebg
+        X = cat(1, X, img(mask(:),:));
+        Y = cat(1, Y, ones(sum(mask(:)),1).*i);
+        X = cat(1, X, img(bgndmask(:),:));
+        Y = cat(1, Y, zeros(sum(bgndmask(:)),1));
+    else
+        X = cat(1, X, img(mask(:),:));
+        Y = cat(1, Y, ones(sum(mask(:)),1).*(i-1));
+    end
+    
 end
 
-% randomly select a uniform distribution of each class
+% add background class and sort for sampling step
+if includebg
+    classes = [{'Bgnd'}; classes];
+    numclasses = numclasses + 1;
+    [Y,idx] = sort(Y, 'ascend');
+    X = X(idx,:);
+end
 
+% randomly sample a uniform distribution of each class based on samplesize
+samplecounts = histcounts(Y);
+
+if samplesize < 1
+    samplesize = min(samplecounts);
+end
+
+shiftsize = [0 cumsum(samplecounts)];
+sampleidx = zeros(samplesize*numclasses,1);
+for i = 1:numclasses
+    % sample with replacement if sampe size is smaller than the number of
+    % samples
+    if samplesize > samplecounts(i)
+        warning('Samples for %s is less than the defined sample size -- sampling with replacement', classes{i});
+        sampleidx((i-1)*samplesize+1:i*samplesize) = randi(samplecounts(i),samplesize,1) + shiftsize(i);
+    else
+        sampleidx((i-1)*samplesize+1:i*samplesize) = randperm(samplecounts(i),samplesize) + shiftsize(i);
+    end
+end
+
+X = X(sampleidx,:);
+Y = Y(sampleidx,:);
 
 end
 

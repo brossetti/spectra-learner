@@ -2,6 +2,13 @@ function spectralearner( rawdir, refdir, outdir )
 %SPRECTRALEARNER Main function for spectra learner toolbox
 %   Detailed explanation goes here
 
+% set parameters
+ext = '.tif';        % spectral image file extension (only supports tiff)
+includebg = true;    % include the background as a class
+samplesize = 0;      % reference sample size for each class (0 = minimum class size)
+plt = true;          % display segmentation images and plots
+confthresh = 0.7;    % minimum threshold for classification
+
 % check input
 if nargin == 0
     rawdir = fullfile('..', 'raw');
@@ -18,8 +25,8 @@ end
 if exist(fullfile(refdir, 'model.mat'), 'file')
     load(fullfile(refdir, 'model.mat'));
 else 
-    [X, Y, classes] = getrefdata(refdir, true);
-    mdl =  train(X,Y);
+    [X, Y, classes] = getrefdata(refdir, ext, includebg, samplesize, plt);
+    [mdl, confMat] =  train(X,Y);
     save(fullfile(refdir, 'model.mat'), 'mdl', '-v7.3');
 end
 

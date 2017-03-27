@@ -3,9 +3,11 @@ function [ img ] = stackread( filename )
 %   Detailed explanation goes here
 
 imginfo = imfinfo(filename);
-m = imginfo(1).Width;
-n = imginfo(1).Height;
-nslices = length(imginfo);
+
+n = imginfo(1).Width;
+m = imginfo(1).Height;
+p = length(imginfo);
+
 switch imginfo(1).BitDepth;
     case 8
         bd = 'uint8';
@@ -14,9 +16,10 @@ switch imginfo(1).BitDepth;
     otherwise
         bd = 'uint8';
 end
-img = zeros(n,m,nslices,bd);
 
-for i=1:nslices
+img = zeros(m,n,p,bd);
+
+for i=1:p
    img(:,:,i) = imread(filename,'Index',i,'Info',imginfo);
 end
 
