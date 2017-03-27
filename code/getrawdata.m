@@ -2,9 +2,13 @@ function [ img, grayimg ] = getrawdata( filepaths )
 %GETRAWDATA Imports raw spectral image data for classification
 %   Detailed explanation goes here
 
-
 % set image information
 imginfo = imfinfo(filepaths{1});
+
+n = imginfo(1).Width;
+m = imginfo(1).Height;
+p = length(imginfo);
+
 switch imginfo(1).BitDepth;
     case 8
         bd = 'uint8';
@@ -13,9 +17,6 @@ switch imginfo(1).BitDepth;
     otherwise
         bd = 'uint8';
 end
-m = imginfo(1).Width;
-n = imginfo(1).Height;
-p = length(imginfo);
 
 % initialize
 img = [];

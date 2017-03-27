@@ -1,9 +1,9 @@
-function [ stack, rgbimg ] = classify( mdl, img, grayimg )
+function [ stack, rgbimg ] = classify( mdl, bgnd, img, grayimg )
 %CLASSIFY Classifies a raw spectral image based on a pre-trained model
 %   Detailed explanation goes here
 
 % check input
-if nargin < 3
+if nargin < 4
     % convert spectral image to grayscale
     grayimg = cast(mean(img,3), 'uint8');
 end
@@ -12,7 +12,9 @@ end
 [m,n,p] = size(img);
 
 % generate class predictions
-classes = predict(mdl, reshape(img, m*n, p));
+gcp;
+paroptions=statset('UseParallel',true);
+classes = predict(mdl, reshape(img, m*n, p), 'Options', paroptions);
 
 % generate classified stack
 nclasses = numel(mdl.ClassNames);
@@ -23,8 +25,11 @@ end
 stack = reshape(stack, m, n, nclasses);
 
 % generate rgb preview image
-% cmap = [1, 1, 1; hsv(nclasses-1)];
-cmap = hsv(nclasses);
+if bgnd
+    cmap = [1, 1, 1; hsv(nclasses-1)];
+else
+    cmap = hsv(nclasses);
+end
 wghts = reshape(cmap(classes+1,:), m, n, 3);
 rgbimg = repmat(double(grayimg), 1, 1, 3) .* wghts;
 rgbimg = rgbimg ./ max(rgbimg(:)) .* 255;

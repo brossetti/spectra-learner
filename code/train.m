@@ -12,7 +12,7 @@ gcp;
 paroptions=statset('UseParallel',true);
 t = templateSVM('KernelFunction', 'gaussian');
 mdl = fitcecoc(X(trainidx,:),Y(trainidx), 'Learner', t, ...
-    'Prior', 'uniform', 'Options', paroptions);
+    'Prior', 'uniform', 'FitPosterior', false, 'Options', paroptions);
 
 % check model with test set
 predclass = predict(mdl, X(testidx,:));
