@@ -1,6 +1,18 @@
 function [ img, grayimg ] = getrawdata( filepaths )
 %GETRAWDATA Imports raw spectral image data for classification
-%   Detailed explanation goes here
+%   getrawdata() is a function in the Spectra Learner pipeline. It takes a 
+%   cell array of full file paths corresponding to raw spectral images. The
+%   spectral images are loaded, normalizes, and a grayscale version is
+%   generated. Images should be TIFF formatted and have a bit depth of
+%   uint8 or uint16.
+%
+%   Example:
+%       [ img, grayimg ] = getrawdata( filepaths )
+%
+%   Compatibility: Written and tested on MATLAB v9.0.0.341360 (2016a)
+%
+%   Author: Blair Rossetti
+%
 
 % set image information
 imginfo = imfinfo(filepaths{1});
@@ -32,7 +44,7 @@ for i = 1:length(filepaths)
     n = n + size(tmp, 3);
     
     % normalize stack to max intensity
-%     tmp = tmp ./ max(tmp(:));
+    tmp = tmp ./ max(tmp(:));
     
     % concatenate
     img = cat(3, img, tmp);

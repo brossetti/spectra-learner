@@ -1,7 +1,7 @@
 function [ filepaths ] = getimpaths( rootdir, ext )
-%GETIMPATHS Retrieves full files for all images in rootdir ending with ext
-%   getimpaths() is a function for retrieving all filenames in a root
-%   directory of a given extension. This function does not recursively
+%GETIMPATHS Retrieves full paths for all files in rootdir ending with ext
+%   getimpaths() is a function for retrieving all paths in a root
+%   directory with a given extension. This function does not recursively
 %   travel the directory tree.
 %
 %   Example:

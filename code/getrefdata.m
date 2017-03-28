@@ -1,6 +1,34 @@
 function [ X, Y, classes ] = getrefdata( rootdir, ext, includebg, samplesize, plt )
 %GETREFDATA Imports reference image data for training
-%   Detailed explanation goes here
+%   getrefdata() is a function in the Spectra Learner pipeline. It takes a 
+%   root directory, file extension, boolean indicating whether to include
+%   background samples, size of training samples, and boolean indicating 
+%   whether to plot segmented images. The function imports all reference
+%   images in the root directory with the given extension, and segments the
+%   cells. Pixels in cell regions are added to the training matrix X, and
+%   their labels (i.e. reference name rank) are recorded in vector Y. If
+%   background samples are included, the function masks out cell regions
+%   and records background pixels in X and their 0 label in Y. After the
+%   reference images have been sampled, X and Y are trimmed to the
+%   defined sample size. When samplesize is 0, X and Y are trimmed to the
+%   minimum class size. If samplesize is less than a class size, sampling
+%   is performed with replacement. getrefdata() returns the trimmed
+%   training data (X and Y) and the class names in rank order.
+%
+%   Examples:
+%       [ X, Y, classes ] = getrefdata()
+%       [ X, Y, classes ] = getrefdata( rootdir )
+%       [ X, Y, classes ] = getrefdata( rootdir, ext )
+%       [ X, Y, classes ] = getrefdata( rootdir, ext, includebg )
+%       [ X, Y, classes ] = getrefdata( rootdir, ext, includebg, samplesize )
+%       [ X, Y, classes ] = getrefdata( rootdir, ext, includebg, samplesize, plt )
+%
+%   Compatibility: Written and tested on MATLAB v9.0.0.341360 (2016a)
+%   Required Toolboxes: Statistics and Machine Learning and 
+%                       Image Processing
+%
+%   Author: Blair Rossetti
+%
 
 switch nargin
     case 0 
@@ -105,10 +133,12 @@ for i = 1:numclasses
         mask = imbinarize(mean(img,3));
     end
     
-    % kmeans also works well for generating the mask
-%     [labels,centroids] = kmeans(reshape(img,m*n,p),2);
-%     mask = labels == 
-    
+    % kmeans also works well for generating the mask becuase it is a nice
+    % two class classificatio problem. the call would look like this
+    % [labels,centroids] = kmeans(reshape(img,m*n,p),2);
+    % the trick is robustly figuring out which label is the background
+    % (e.g. could use max vector norm). i'll leave this for another day
+    % or another person
     
     if includebg
         bgndmask = imerode(~mask, strel('square', round(size(img, 1)/8)));

@@ -57,7 +57,7 @@ else
 end
 
 % import raw data
-filegrps = setuprawdata(rawdir);
+filegrps = setuprawdata(rawdir, ext);
 
 % process raw data
 for i = 1:size(filegrps, 2)

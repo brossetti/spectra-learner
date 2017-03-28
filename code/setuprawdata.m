@@ -1,6 +1,19 @@
-function [ filegrps ] = setuprawdata( rootdir )
+function [ filegrps ] = setuprawdata( rootdir, ext )
 %SETUPRAWDATA Searches files in raw spectral image directory for groups
-%   Detailed explanation goes here
+%   setuprawdata() is a function in the Spectra Learner pipeline. It takes 
+%   a root directory and a file extension, and returns an array structure
+%   containing the name and path of all raw data groups (each group is a
+%   separate entry in the array. This function is used to handle sequential
+%   spectral images, and require that the user abide by the file naming
+%   scheme in README.md.
+%
+%   Example:
+%       [ filegrps ] = setuprawdata( rootdir, ext )
+%
+%   Compatibility: Written and tested on MATLAB v9.0.0.341360 (2016a)
+%
+%   Author: Blair Rossetti
+%
 
 if nargin == 0
     rootdir = fullfile('..', 'raw');
@@ -12,7 +25,7 @@ if ~exist(rootdir, 'dir')
 end
 
 % get list of files
-filepaths = getimpaths(rootdir);
+filepaths = getimpaths(rootdir, ext);
 
 % parse filenames
 [~, filenames, ~] = cellfun(@fileparts, filepaths, 'UniformOutput', false);
