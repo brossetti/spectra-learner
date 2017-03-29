@@ -10,7 +10,7 @@ function [ mdl, confMat ] = train( X, Y )
 %   resulting model and confusion matrix are returned.
 %
 %   Example:
-%       [ mdl, confMat ] = train( X, Y)
+%       [ mdl, confMat ] = train( X, Y )
 %
 %   Compatibility: Written and tested on MATLAB v9.0.0.341360 (2016a)
 %   Required Toolboxes: Statistics and Machine Learning and Parallel 

@@ -1,5 +1,5 @@
 function spectralearner( rawdir, refdir, outdir )
-%SPRECTRALEARNER Main function for spectra learner toolbox
+%SPRECTRALEARNER Main function for spectra learner pipeline
 %   Spectra Learner is a pipeline of functions for classifying spectral
 %   micrographs by training a gaussian SVM model on reference images. This
 %   pipeline can handle simultaneous and sequentially acquired spectral
