@@ -13,19 +13,19 @@ Spectra Learner was written in MATLAB 2016a, and has been tested on unix-based s
 
 ## Experimental Setup
 ### Overview
-There are two basic modes for a spectral microscopy experiment: simultaneous scan and sequential scan. In simultaneous scan, one or multiple lasers are use simultaneously to acquire one spectral image. In sequential scan, one or multiple lasers are used to capture a sequence of spectral images. Simultaneous scanning is useful when you have only a few fluorophores to classify, and those fluorophores do not have emissions peaks near the wavelengths of the dichroic mirrors. Sequential scanning is useful when you have many fluorphores to classify, or fluorophores have emission peaks on or near the wavelengths of the dichroic mirrors. Since sequential scanning results in separate spectral image files, a particular naming scheme must be followed for the toolbox to combine the correct data.
+There are two basic modes for a spectral microscopy experiment: simultaneous scan and sequential scan. In simultaneous scan, one or multiple lasers are used simultaneously to acquire one spectral image. In sequential scan, one or multiple lasers are used to capture a sequence of spectral images. Simultaneous scanning is useful when you have only a few fluorophores to classify, and those fluorophores do not have emissions peaks near the wavelengths of the dichroic mirrors. Sequential scanning is useful when you have many fluorphores to classify, or fluorophores have emission peaks on or near the wavelengths of the dichroic mirrors. Since sequential scanning results in separate spectral image files, a particular naming scheme must be followed for the toolbox to combine the correct data.
 
 ### Reference Images
-The Spectra Learner classification model makes predictions by first learning all possible signatures during the training phase. The user provides reference images of each spectral signature. Reference images should be acquired under similar physical conditions to those of the experimental images. The reference images are assumed to be grayscale TIFF stacks with a black background. 
+The Spectra Learner classification model makes predictions by first learning all possible signatures during the training phase. The user provides reference images of each spectral signature. Reference images should be acquired under similar physical conditions to those of the experimental images. The reference images are assumed to be grayscale TIFF stacks with a black background.
 
-The resolution of your reference images will impact the duration of the training phase. A good balance between speed and accuracy can be obtained with images at 256x256 resolution. Higher resolution images provide more observations for training the model, but will increase the overall time of training. 
+The resolution of your reference images will impact the duration of the training phase. A good balance between speed and accuracy can be obtained with images at 256x256 resolution. Higher resolution images provide more observations for training the model, but will increase the overall time of training.
 
 Reference images must follow a particular naming scheme. Each reference image should be names using the fluorophore and the scan identifier separated by an underscore. For example, a reference image for Atto 488 using the 488nm laser would be named `Atto488_488.tif`. The next sequential scan using the 514nm laser would be named `Atto488_514.tif`. It is not necessary to have all possible sequential scans for each fluorophore. Any missing scans will be filled with zeros.
 
 Reference images should be placed in the `reference` directory
 
 ### Raw Images
-Spectra Learner expects all raw experimental images to maintain the same properties (i.e. dimensions and bit depth). The images should be taken under similar conditions to the reference images to increase the accuracy of classification. 
+Spectra Learner expects all raw experimental images to maintain the same properties (i.e. dimensions and bit depth). The images should be taken under similar conditions to the reference images to increase the accuracy of classification.
 
 Spectra Learner can process batch files that follow the proper naming scheme. Each file name should consist of the group identifier and the scan identifier separated by an underscore. For example, here are the file names for two groups of files acquired in a sequential scan mode.
 
@@ -46,7 +46,7 @@ Raw experimental images should be placed in the `raw` directory.
 
 ### Output Images
 
-For each group of raw files, Spectra Learner will produce two files: a JPG color preview and a TIFF stack. The first channel of the TIFF stack is the background channel trained on the background pixels of the reference images. 
+For each group of raw files, Spectra Learner will produce two files: a JPG color preview and a TIFF stack. The first channel of the TIFF stack is the background channel trained on the background pixels of the reference images.
 
 ### References
 Valm, A.M., Welch, J.L.M. and Borisy, G.G., 2012. CLASI-FISH: principles of combinatorial labeling and spectral imaging. *Systematic and applied microbiology*, 35(8), pp.496-502.
